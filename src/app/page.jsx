@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "motion/react"
 import RainEffect from "@/components/RainEffect"
 import FirstScreen from "@/components/FirstScreen"
@@ -26,23 +26,38 @@ export default function ProposalSite() {
   const [musicStarted, setMusicStarted] = useState(false)
 
   useEffect(() => {
+    // The loader is already visible (server-rendered) while the code downloads,
+    // so only wait for whatever is left of ~1.2s since the page opened.
+    // On a slow phone that's usually 0 — the first screen comes straight in.
+    const remaining = Math.max(0, 1200 - performance.now())
     const timer = setTimeout(() => {
       setIsLoading(false)
       setCurrentScreen("first")
-    }, 1000)
+    }, remaining)
 
-    // Once the first screen is up, fetch the later screens' code and the photos
-    // in the background so every next step is instant.
+    // Once the first screen is up, fetch the later screens' code in the background
     const warmup = setTimeout(() => {
       loadQuestion(); loadBalloons(); loadPhotos(); loadFinal()
-      photos.forEach(({ src }) => {
-        const img = new window.Image()
-        img.src = src
-      })
-    }, 1200)
+    }, 1500)
 
     return () => { clearTimeout(timer); clearTimeout(warmup) }
   }, [])
+
+  // Preload photos one by one, only after the first screen is passed —
+  // so they never slow down the first load on mobile, but are ready before the photo screen.
+  const preloadStarted = useRef(false)
+  useEffect(() => {
+    if (currentScreen === "loader" || currentScreen === "first" || preloadStarted.current) return
+    preloadStarted.current = true
+    let i = 0
+    const next = () => {
+      if (i >= photos.length) return
+      const img = new window.Image()
+      img.onload = img.onerror = next
+      img.src = photos[i++].src
+    }
+    next()
+  }, [currentScreen])
 
   const nextScreen = (screen) => {
     if (!musicStarted) {
@@ -57,17 +72,18 @@ export default function ProposalSite() {
       {/* Dots background */}
       <div className="fixed inset-0 bg-[radial-gradient(white_1px,transparent_1px)] bg-size-[40px_40px] opacity-10" />
 
-      {/* Radial gradients for background */}
-      <div className="fixed inset-0 z-0 blur-[120px] opacity-20" style={{
-        backgroundImage: "radial-gradient(circle at 20% 25%, rgba(75, 0, 79, 0.6), transparent 40%)",
+      {/* Radial gradients for background (no CSS blur — it's very slow on phones;
+          the wider gradient fade gives the same soft glow) */}
+      <div className="fixed inset-0 z-0 opacity-20" style={{
+        backgroundImage: "radial-gradient(circle at 20% 25%, rgba(75, 0, 79, 0.6), transparent 55%)",
       }} />
 
-      <div className="fixed inset-0 z-0 blur-[120px] opacity-20" style={{
-        backgroundImage: "radial-gradient(circle at 80% 80%, rgba(77, 2, 24, 0.6), transparent 40%)",
+      <div className="fixed inset-0 z-0 opacity-20" style={{
+        backgroundImage: "radial-gradient(circle at 80% 80%, rgba(77, 2, 24, 0.6), transparent 55%)",
       }} />
 
-      <div className="fixed inset-0 z-0 blur-[140px] opacity-10" style={{
-        backgroundImage: "radial-gradient(circle at 50% 50%, rgba(80, 0, 92, 0.5), transparent 40%)",
+      <div className="fixed inset-0 z-0 opacity-10" style={{
+        backgroundImage: "radial-gradient(circle at 50% 50%, rgba(80, 0, 92, 0.5), transparent 55%)",
       }} />
 
       {!isLoading && <RainEffect />}

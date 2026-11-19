@@ -14,7 +14,7 @@ export default function Music({ shouldPlay }) {
                 audioRef.current.preload = "auto"
                 audioRef.current.load()
             }
-        }, 1500)
+        }, 3000)
         return () => clearTimeout(timer)
     }, [])
 
