@@ -11,7 +11,7 @@ import FinalScreen from "@/components/FinalScreen"
 import CuteLoader from "@/components/CuteLoader"
 import FloatingHearts from "@/components/FloatingHearts"
 import Music from "@/components/Music"
-import { questionOne, questionTwo } from "@/data"
+import { questionOne, questionTwo, photos } from "@/data"
 
 export default function ProposalSite() {
   const [currentScreen, setCurrentScreen] = useState("loader")
@@ -23,6 +23,12 @@ export default function ProposalSite() {
       setIsLoading(false)
       setCurrentScreen("first")
     }, 3000)
+
+    // Warm the browser cache with the photos while the intro screens play
+    photos.forEach(({ src }) => {
+      const img = new window.Image()
+      img.src = src
+    })
 
     return () => clearTimeout(timer)
   }, [])

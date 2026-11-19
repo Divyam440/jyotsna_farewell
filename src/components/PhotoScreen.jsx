@@ -89,6 +89,8 @@ export default function PhotoScreen({ onNext }) {
                                     <Image
                                         fill
                                         sizes="300px"
+                                        unoptimized
+                                        loading="eager"
                                         src={photo.src}
                                         alt="Our memory"
                                         className="w-full h-full object-cover p-2 rounded-2xl"
