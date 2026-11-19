@@ -75,8 +75,8 @@ export const photosScreenEndText = "Something more I want to showcase..."
 // 5. Final Screen (Proposal Message)
 // ==========================
 export const proposalMessage = `
-Divyam: Miss you already, Jyotsna Aunty! Keep spreading your madness and tadka laughter wherever you go. 😂❤️
-Yash: Love you, our Nepali Momo Paglu! Delhi ke momos aur hum dono yaad aayenge! 🥟😭
+Divyam: Miss you already, Jyotsna Aunty! Keep spreading your madness and tadka laugh wherever you go. 😂❤️
+Yash: Oye Nepali Momo Paglu! Ab momos kis ke saath khaayenge aur office ka drama kaun karega? 😂🥟 Miss you, Jyotsna! ❤️
 Prashant: We'll miss your craziness, Jyotsna! Keep smiling and rocking your new chapter. 🥹❤️
 Sonaly: Miss you, Jyotsna! Office ki raunak ab tumhare bina pehle jaisi nahi rahegi. 🥹❤️
 Dyuti: Keep shining and being your adorable dramatic self! Lots of love, Jyotsna. 💛
