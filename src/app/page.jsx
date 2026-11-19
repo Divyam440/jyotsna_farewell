@@ -4,14 +4,21 @@ import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "motion/react"
 import RainEffect from "@/components/RainEffect"
 import FirstScreen from "@/components/FirstScreen"
-import QuestionScreen from "@/components/QuestionScreen"
-import BalloonsScreen from "@/components/BalloonsScreen"
-import PhotoScreen from "@/components/PhotoScreen"
-import FinalScreen from "@/components/FinalScreen"
+import dynamic from "next/dynamic"
 import CuteLoader from "@/components/CuteLoader"
 import FloatingHearts from "@/components/FloatingHearts"
 import Music from "@/components/Music"
 import { questionOne, questionTwo, photos } from "@/data"
+
+// Later screens (sweetalert, swiper, confetti) are split out of the first download
+const loadQuestion = () => import("@/components/QuestionScreen")
+const loadBalloons = () => import("@/components/BalloonsScreen")
+const loadPhotos = () => import("@/components/PhotoScreen")
+const loadFinal = () => import("@/components/FinalScreen")
+const QuestionScreen = dynamic(loadQuestion, { ssr: false })
+const BalloonsScreen = dynamic(loadBalloons, { ssr: false })
+const PhotoScreen = dynamic(loadPhotos, { ssr: false })
+const FinalScreen = dynamic(loadFinal, { ssr: false })
 
 export default function ProposalSite() {
   const [currentScreen, setCurrentScreen] = useState("loader")
@@ -22,15 +29,19 @@ export default function ProposalSite() {
     const timer = setTimeout(() => {
       setIsLoading(false)
       setCurrentScreen("first")
-    }, 3000)
+    }, 1000)
 
-    // Warm the browser cache with the photos while the intro screens play
-    photos.forEach(({ src }) => {
-      const img = new window.Image()
-      img.src = src
-    })
+    // Once the first screen is up, fetch the later screens' code and the photos
+    // in the background so every next step is instant.
+    const warmup = setTimeout(() => {
+      loadQuestion(); loadBalloons(); loadPhotos(); loadFinal()
+      photos.forEach(({ src }) => {
+        const img = new window.Image()
+        img.src = src
+      })
+    }, 1200)
 
-    return () => clearTimeout(timer)
+    return () => { clearTimeout(timer); clearTimeout(warmup) }
   }, [])
 
   const nextScreen = (screen) => {

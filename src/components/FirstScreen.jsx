@@ -12,7 +12,7 @@ export default function FirstScreen({ onNext }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 1 }}
+            transition={{ duration: 0.5 }}
         >
 
             <div className="text-center max-w-3xl mx-auto">
@@ -24,7 +24,7 @@ export default function FirstScreen({ onNext }) {
                         type: "tween",
                         stiffness: 260,
                         damping: 20,
-                        delay: 0.5,
+                        delay: 0.1,
                     }}
                 >
                     <div className="w-36 h-36 mx-auto rounded-full bg-gradient-to-br from-purple-500/20 to-rose-500/20 flex items-center justify-center border-2 border-pink-400/30 pulse-glow">
@@ -44,7 +44,7 @@ export default function FirstScreen({ onNext }) {
                     className="text-4xl md:text-6xl bg-gradient-to-r from-pink-300 via-purple-300 to-fuchsia-300 text-transparent bg-clip-text mb-6 font-semibold leading-tight"
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 1, duration: 0.8 }}
+                    transition={{ delay: 0.2, duration: 0.6 }}
                 >
                     {firstHeading}
                 </motion.h1>
@@ -54,7 +54,7 @@ export default function FirstScreen({ onNext }) {
                     className="text-pink-200/70 text-xl md:text-2xl mb-12"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 1.5, duration: 0.8 }}
+                    transition={{ delay: 0.4, duration: 0.6 }}
                 >
                     {firstSubtext && firstSubtext.trim().length !== 0 && firstSubtext}
                 </motion.p>
@@ -62,7 +62,7 @@ export default function FirstScreen({ onNext }) {
                 <motion.div
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 2, duration: 0.5 }}
+                    transition={{ delay: 0.6, duration: 0.4 }}
                 >
                     <button
                         onClick={onNext}
